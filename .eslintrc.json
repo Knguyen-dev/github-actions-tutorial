@@ -1,0 +1,34 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true,
+    /*
+    - So by default eslint will say your jest global variables are undefined, when in reality, they're just global variables
+    and things still work. Since we setup husky, that would prevent us from committing our files.
+
+    To fix this, add jest to your environment.
+    */
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended", // Docs are here: https://eslint.org/docs/latest/rules/
+    "prettier" // eslint-config-prettier, turns off all eslint rules that mess with prettier
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    // Having unused variables is bad, but it's not going to break the program
+    "no-unused-vars": "error",
+
+    // We don't want console.logs in our final commits
+    "no-console": 2,
+
+    // Require strict equality checks; don't want to have a annoying bug and issue because of forgetting that
+    // I didn't use strict equality.
+    "eqeqeq": "error"
+  },
+  "ignorePatterns": ["dist/", "node_modules/"]
+}

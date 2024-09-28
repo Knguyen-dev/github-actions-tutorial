@@ -2,15 +2,13 @@ name: CI for Github
 
 # Set up 'triggers'?
 on:
-  # Then you need to set one up that applies prettier to all the source files
-  # you have. Remember to ignore node_modules and irrelevant stuff. This should be on each commit
+  # - Handling commits: Husky and our precommits will handle any pre-commit logic.
+  # - Handling pushes: Then github actions will take care of any pushes or whatnot.
 
-  # Also we need a 'pre-commit' hook that checks eslint after we do this stuff
-
-  # If we push to the 'main' branch, then we activate our CI/CD pipeline's build process
   push:
     branches:
       - main
+      - feature/*
 # If triggers are set off, run 'jobs'. If all jobs pass without issue, then authorize the action
 jobs:
   # A 'job' that runs our application's tests.
@@ -21,11 +19,11 @@ jobs:
     steps:
       # - name: myStepName
       # - uses: some_link_to_the_step?
-      # Honestly don't know what it's checking out but I guess it's necessary
-      # I'm guessing we're using github actions software and also NodeJS. That is probably
-      # The things it is downloading
+      # This pulls your repository code, allowing the subsequent steps to access it.
       - name: Checkout the repository
         uses: actions/checkout@v3
+
+      # Installs the necessary version of NodeJS, so Node Version 16.
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -35,21 +33,3 @@ jobs:
         run: npm install
       - name: Run tests
         run: npm test
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v3
-      - name: Deploy to Github Pages
-        # I am guessing this is some software that helps us deploy to gh-pages that many people use?
-        uses: peaceiris/actions-gh-pages@v3
-
-        # Again I dont know what the 'with' keyword is doing, but I am guessing it is
-        # providing parameters. I guess some steps require parameters and I am supposed to know that
-        with:
-          # Where is this value coming from? A file? My IDE? How? It autocompleted
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          publish_dir: ./build
