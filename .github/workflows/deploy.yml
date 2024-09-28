@@ -4,7 +4,6 @@ name: CI for Github
 on:
   # - Handling commits: Husky and our precommits will handle any pre-commit logic.
   # - Handling pushes: Then github actions will take care of any pushes or whatnot.
-
   push:
     branches:
       - main
@@ -27,9 +26,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18" # or specify the version you need
       # Steps for installing dependencies
       - name: Install dependencies
         run: npm install
+
+      - name: Run lint
+        run: npm run lint
+
       - name: Run tests
         run: npm test
